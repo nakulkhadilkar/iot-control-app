@@ -1,0 +1,9 @@
+/* Show navbar fixed to the top */
+body {
+  padding-top: 4.5rem;
+}
+
+/* Control toggle style */
+.control_toggle {
+  text-align: center;
+}
