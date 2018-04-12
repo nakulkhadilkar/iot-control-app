@@ -2,7 +2,7 @@
 var controls = {};
 
 // setup ThingSpeak Update API
-var thingSpeakUpdate = 'http://api.thingspeak.com/update';
+var thingSpeakUpdate = 'https://api.thingspeak.com/update';
 
 // check local storage for controls and display them
 if (localStorage.getItem('controls')) {
