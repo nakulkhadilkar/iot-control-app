@@ -1,6 +1,9 @@
 // setup controls
 var controls = {};
 
+// setup ThingSpeak Update API
+var thingSpeakUpdate = 'http://api.thingspeak.com/update';
+
 // check local storage for controls and display them
 if (localStorage.getItem('controls')) {
   controls = JSON.parse(localStorage.getItem('controls'));
@@ -35,10 +38,19 @@ function displayControls() {
 
 function getControl(i, control) {
 
-  var control_html = '<div class="control_toggle">' +
-                     '  <button id="toggle_' + i + '" class="btn btn-success" onclick="buttonControl(' + control.source.field + ', \'' + control.source.writeKey + '\', 1)">On</button>' +
-                     '  <button id="toggle_' + i + '" class="btn btn-error" onclick="buttonControl(' + control.source.field + ', \'' + control.source.writeKey + '\', 0)">Off</button>' +
-                     '</div>';
+  var control_html = '';
+
+  if (control.type == 'switch') {
+    control_html = '<div class="control_toggle">' +
+                   '  <button id="toggle_' + i + '" class="btn btn-success" onclick="buttonControl(' + control.source.field + ', \'' + control.source.writeKey + '\', 1)">On</button>' +
+                   '  <button id="toggle_' + i + '" class="btn btn-error" onclick="buttonControl(' + control.source.field + ', \'' + control.source.writeKey + '\', 0)">Off</button>' +
+                   '</div>';
+  }
+  else if (control.type == 'input') {
+    control_html = '<div class="control_toggle">' +
+                   '  <input id="input_' + i + '" type="text" class="form-control" onchange="inputControl(' + control.source.field + ', \'' + control.source.writeKey + '\',' + '\'input_' + i + '\')">' +
+                   '</div>';
+  }
 
   return control_html;
 }
@@ -46,15 +58,32 @@ function getControl(i, control) {
 // send state to ThingSpeak using button
 function buttonControl(field, key, state) {
 
-  // contruct URL to send request
-  var url = 'http://api.thingspeak.com/update';
-
   // contruct data to send
   var data = 'api_key=' + key + '&' +
              'field' + field + '=' + state;
 
   // get ThingSpeak data using AJAX
-  $.ajax({url: url, data: data, success: function(data){
+  $.ajax({url: thingSpeakUpdate, data: data, success: function(data){
+      // check if there is a valid response
+      if (data >> 0) {
+        console.log(data);
+      }
+  }});
+
+}
+
+// send input to ThingSpeak using input box
+function inputControl(field, key, input) {
+
+  // get value of input box
+  var inputValue = $('#' + input).val();
+
+  // contruct data to send
+  var data = 'api_key=' + key + '&' +
+             'field' + field + '=' + inputValue;
+
+  // get ThingSpeak data using AJAX
+  $.ajax({url: thingSpeakUpdate, data: data, success: function(data){
       // check if there is a valid response
       if (data >> 0) {
         console.log(data);
