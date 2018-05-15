@@ -51,6 +51,11 @@ function getControl(i, control) {
                    '  <input id="input_' + i + '" type="text" class="form-control" onchange="inputControl(' + control.source.field + ', \'' + control.source.writeKey + '\',' + '\'input_' + i + '\')">' +
                    '</div>';
   }
+  else if (control.type == 'iframe') {
+    control_html = '<div class="control_iframe" style="width:' + control.source.width + 'px; height: ' + control.source.height + 'px">' +
+                   '  <iframe width="' + control.source.width + '" height="' + control.source.height + '" src="' + control.source.url + '" frameborder="0"></iframe>' +
+                   '</div>';
+  }
 
   return control_html;
 }
