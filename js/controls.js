@@ -20,17 +20,23 @@ function displayControls() {
   // clear controls
   $('#controls').empty();
 
+  // setup Masonry
+  var $grid = $('.grid').masonry({
+    columnWidth: 200
+  });
+
   // create a card for each control
   $.each(controls, function(i, control) {
 
-    var control_new = '<div class="card bg-light mb-3">' +
-                        '<div class="card-header">' + control.name + '</div>' +
-                        '<div class="card-body">' +
-                          getControl(i, control) +
-                        '</div>' +
-                      '</div>';
+    var control_new = $('<div class="card bg-light mb-3">' +
+                          '<div class="card-header">' + control.name + '</div>' +
+                          '<div class="card-body">' +
+                            getControl(i, control) +
+                          '</div>' +
+                        '</div>');
 
-    $('#controls').append(control_new);
+    // add each control to the grid
+    $grid.append(control_new).masonry('appended',control_new);
 
   });
 
